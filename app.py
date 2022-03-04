@@ -86,7 +86,10 @@ def home():
     if not session.get('logged_in'):
         return redirect("/login")
     else:
-        return render_template('view_detail.html')
+        email = session.get('email')
+        first_name = session.get('first_name')
+        last_name = session.get('last_name')
+        return render_template('view_detail.html', email=email, first_name=first_name, last_name=last_name)
 
 # Register Page
 @app.route('/register')
@@ -146,7 +149,7 @@ def create_user():
         session["token"] =  token.decode('utf-8') # store token
         session["email"] = user_data_queried.email
         session["first_name"] = user_data_queried.first_name
-        session["last_name"] = user_data_queried.first_name
+        session["last_name"] = user_data_queried.last_name
 
     except Exception as e:
         return jsonify({"message": e, "type": "error"}), 500
@@ -195,7 +198,7 @@ def login_user():
             session["token"] =  token.decode('utf-8') # store token
             session["email"] = user_data.email
             session["first_name"] = user_data.first_name
-            session["last_name"] = user_data.first_name
+            session["last_name"] = user_data.last_name
             
             user_information = {"user_id": user_data.user_id, "first_name": user_data.first_name, "last_name": user_data.last_name, "email": user_data.email}
             return jsonify({"message": "Login successful", "type": "success", "user_information": user_information}), 200
