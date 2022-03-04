@@ -137,12 +137,12 @@ def create_user():
         # Create JWT Token
         token = jwt.encode({
                 'user': user_data_queried.email,
-                'exp': datetime.utcnow() + timedelta(seconds=10)
-                #'exp': datetime.utcnow() + timedelta(days=2)
+                #'exp': datetime.utcnow() + timedelta(seconds=10)
+                'exp': datetime.utcnow() + timedelta(days=2)
             },
         app.config['SECRET_KEY'])
         session['logged_in'] = True
-        print("token: ",token.decode('utf-8'))
+        # print("token: ",token.decode('utf-8'))
         session["token"] =  token.decode('utf-8') # store token
         session["email"] = user_data_queried.email
         session["first_name"] = user_data_queried.first_name
@@ -187,8 +187,8 @@ def login_user():
             
             token = jwt.encode({
                 'user': user_data.email,
-                'exp': datetime.utcnow() + timedelta(seconds=10)
-                # 'exp': datetime.utcnow() + timedelta(days=2)
+                #'exp': datetime.utcnow() + timedelta(seconds=10)
+                'exp': datetime.utcnow() + timedelta(days=2)
             },
             app.config['SECRET_KEY'])
             print("token: ",token.decode('utf-8'))
