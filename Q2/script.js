@@ -1,3 +1,5 @@
+localStorage.clear(); // delete previous existing storage
+
 function newtask(el) {
     div1 = document.querySelectorAll(".div1 .divtask").length + 1
 
@@ -110,25 +112,16 @@ function drop(ev, el) {
         if (prevDiv1<3) {
             el.appendChild(document.getElementById(data));
         }   
-        else {
-            alert("Column is already at its max.");
-        }
     }
     else if (targetColumnClass=="div2") {
         if (prevDiv2<3) {
             el.appendChild(document.getElementById(data));
         } 
-        else {
-            alert("Column is already at its max.");
-        }
     }
     else if (targetColumnClass=="div3") {
         if (prevDiv3<3) {
             el.appendChild(document.getElementById(data));
         } 
-        else {
-            alert("Column is already at its max.");
-        }
     }
     // check if need add inside
     setColumnCountInStorage(div1, div2, div3)
