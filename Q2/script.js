@@ -1,12 +1,7 @@
 function newtask(el) {
     div1 = document.querySelectorAll(".div1 .divtask").length + 1
-    // div2 = document.querySelectorAll(".div2 .divtask").length
-    // div3 = document.querySelectorAll(".div3 .divtask").length
 
     if (div1 <= 3) {
-        // console.log("div1: "+div1)
-        // console.log("div2: "+div2)
-        // console.log("div3: "+div3)
         var taskDesc = prompt("Enter task:");
 
         if (taskDesc!=null) {
@@ -47,9 +42,27 @@ function newtask(el) {
             document.getElementsByClassName("card-body")[0].appendChild(newDiv);
 
             console.log("=======================================")
-            console.log("1"+ document.getElementsByClassName("div1")[0].innerHTML)
-            console.log("2"+ document.getElementsByClassName("div2")[0].innerHTML)
-            console.log("3"+ document.getElementsByClassName("div3")[0].innerHTML)
+            // console.log("1"+ document.getElementsByClassName("div1")[0].innerHTML)
+            // console.log("2"+ document.getElementsByClassName("div2")[0].innerHTML)
+            // console.log("3"+ document.getElementsByClassName("div3")[0].innerHTML)
+            
+            // div1 = document.getElementsByClassName("div1")[0].innerHTML;
+            // div2 = document.getElementsByClassName("div2")[0].innerHTML;
+            // div3 = document.getElementsByClassName("div3")[0].innerHTML;
+
+            // columnContentJSON = {
+            //     'column1': div1,
+            //     'column2': div2,
+            //     'column3': div3
+            // };
+    
+            // localStorage.setItem('columnContent', JSON.stringify(columnContentJSON)); 
+            // ***
+            div1 = document.querySelectorAll(".div1 .divtask").length
+            div2 = document.querySelectorAll(".div2 .divtask").length
+            div3 = document.querySelectorAll(".div3 .divtask").length
+
+            setColumnCountInStorage(div1, div2, div3)
         }
         else {
             alert("Please enter something!");
@@ -61,35 +74,90 @@ function newtask(el) {
 }
 
 function drop(ev, el) {
+    // console.log("ev: ",ev.dataTransfer.getData("text"))
     ev.preventDefault();
     var data = ev.dataTransfer.getData("text");
-    el.appendChild(document.getElementById(data));
-
+    console.log("el: " +el.className.split(' ')[1]) // is there a way to get the current class div??? <-- get 2nd element of classname
     
-    console.log("=======================================")
-    console.log("1"+ document.getElementsByClassName("div1")[0].innerHTML)
-    console.log("2"+ document.getElementsByClassName("div2")[0].innerHTML)
-    console.log("3"+ document.getElementsByClassName("div3")[0].innerHTML)
+    // console.log("=======================================")
+    // console.log("1"+ document.getElementsByClassName("div1")[0].innerHTML)
+    // console.log("2"+ document.getElementsByClassName("div2")[0].innerHTML)
+    // console.log("3"+ document.getElementsByClassName("div3")[0].innerHTML)
+    
+    // div1 = document.getElementsByClassName("div1")[0].innerHTML;
+    // div2 = document.getElementsByClassName("div2")[0].innerHTML;
+    // div3 = document.getElementsByClassName("div3")[0].innerHTML;
+
+    // columnContentJSON = {
+    //     'column1': div1,
+    //     'column2': div2,
+    //     'column3': div3
+    // };
+
+    // localStorage.setItem('columnContent', JSON.stringify(columnContentJSON));
+
+    // check if column has more than 3 tasks
+    createdBoardNameJSON = JSON.parse(localStorage.getItem('columnCount'))
+    prevDiv1 = createdBoardNameJSON['column1'];
+    prevDiv2 = createdBoardNameJSON['column2'];
+    prevDiv3 = createdBoardNameJSON['column3'];
+    console.log("prevdiv1: "+prevDiv1)
+    console.log("prevdiv2: "+prevDiv2)
+    console.log("prevdiv3: "+prevDiv2)
+
+    targetColumnClass=el.className.split(' ')[1];
+    if (targetColumnClass=="div1") {
+        if (prevDiv1<3) {
+            el.appendChild(document.getElementById(data));
+        }   
+        else {
+            alert("Column is already at its max.");
+        }
+    }
+    else if (targetColumnClass=="div2") {
+        if (prevDiv2<3) {
+            el.appendChild(document.getElementById(data));
+        } 
+        else {
+            alert("Column is already at its max.");
+        }
+    }
+    else if (targetColumnClass=="div3") {
+        if (prevDiv3<3) {
+            el.appendChild(document.getElementById(data));
+        } 
+        else {
+            alert("Column is already at its max.");
+        }
+    }
+    // check if need add inside
+    setColumnCountInStorage(div1, div2, div3)
+}
+
+function setColumnCountInStorage(div1, div2, div3) {
+
+    div1 = document.querySelectorAll(".div1 .divtask").length
+    div2 = document.querySelectorAll(".div2 .divtask").length
+    div3 = document.querySelectorAll(".div3 .divtask").length
+
+    columnCountJSON = {
+        'column1': div1,
+        'column2': div2,
+        'column3': div3
+    }
+    
+    localStorage.setItem('columnCount', JSON.stringify(columnCountJSON)); 
+    console.log("curr added column: "+ JSON.stringify(columnCountJSON));
 }
 
 function allowDrop(ev) {
     ev.preventDefault();
 }
 
-function drag(ev) {
-    // div1 = document.querySelectorAll(".div1 .divtask").length
-    // div2 = document.querySelectorAll(".div2 .divtask").length
-    // div3 = document.querySelectorAll(".div3 .divtask").length
-
-    // console.log("div1: "+div1)
-    // console.log("div2: "+div2)
-    // console.log("div3: "+div3)
+function drag(ev) { // ev here not working after refreshing
     
     ev.dataTransfer.setData("text", ev.target.id);
-    console.log(ev.target.id)
-    // compare where I was before that (store 2, 3 row before that)
-    // if it's bigger than 3 then alert and move back to it's orginal position
-
+    console.log(ev.target.id);
 }
 
 function deletediv(ev) {
@@ -100,6 +168,19 @@ function deletediv(ev) {
 	var bintest = confirm("Delete this task?");
 		if (bintest == true) {
 			ev.parentNode.removeChild(ev);
+
+            div1 = document.querySelectorAll(".div1 .divtask").length
+            div2 = document.querySelectorAll(".div2 .divtask").length
+            div3 = document.querySelectorAll(".div3 .divtask").length
+
+            // ***
+            
+            columnCountJSON = {
+                'column1': div1,
+                'column2': div2,
+                'column3': div3
+            }
+            localStorage.setItem('columnCount', JSON.stringify(columnCountJSON)); 
 		} else {
 	    }
 }
@@ -119,6 +200,12 @@ if (JSON.parse(localStorage.getItem('createdBoardName')) != null) {
     document.getElementById("title1").innerHTML = title1;
     document.getElementById("title2").innerHTML = title2;
     document.getElementById("title3").innerHTML = title3;
+    
+    // load column content
+    // columnContentJSON = JSON.parse(localStorage.getItem('columnContent'))
+    // document.getElementsByClassName("div1")[0].innerHTML = columnContentJSON["column1"];
+    // document.getElementsByClassName("div2")[0].innerHTML = columnContentJSON["column2"];
+    // document.getElementsByClassName("div3")[0].innerHTML = columnContentJSON["column3"];
 }
 else {
     // hide content & unhide btn
@@ -138,7 +225,7 @@ function createNew() {
     if (createdBoardName!=null&&title1!=null&&title2!=null&&title3!=null) {
 
         localStorage.clear(); // delete previous existing storage
-        
+
         createdBoardNameJSON = {
             'createdBoardName': createdBoardName,
             'title1': title1,
