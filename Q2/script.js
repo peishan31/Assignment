@@ -25,45 +25,20 @@ function newtask(el) {
             newDiv.addEventListener('dragstart', function() {drag(event)}, false);
             
             var taskcontent = document.createElement('P');
-            // var t = document.createTextNode("Task description");
-            taskcontent.ondblclick = (ev) => {
-                //console.log(this);
-                // console.log("id:" + ev.target.id);
-                taskId = ev.target.id;
-                taskDesc = prompt("Enter updated task description");
-                if (taskDesc!=null)
-                    document.getElementById(taskId).innerHTML = taskDesc;
-            }
+            
             var t = document.createTextNode(taskDesc);
             taskcontent.appendChild(t);
             taskcontent.id="task"+nexttask;     
             taskcontent.className = 'taskcontent';
-            taskcontent.contentEditable = "false";
+            taskcontent.contentEditable = "true";
             newDiv.appendChild(taskcontent);
             
             document.getElementsByClassName("card-body")[0].appendChild(newDiv);
 
-            console.log("=======================================")
-            // console.log("1"+ document.getElementsByClassName("div1")[0].innerHTML)
-            // console.log("2"+ document.getElementsByClassName("div2")[0].innerHTML)
-            // console.log("3"+ document.getElementsByClassName("div3")[0].innerHTML)
-            
-            // div1 = document.getElementsByClassName("div1")[0].innerHTML;
-            // div2 = document.getElementsByClassName("div2")[0].innerHTML;
-            // div3 = document.getElementsByClassName("div3")[0].innerHTML;
-
-            // columnContentJSON = {
-            //     'column1': div1,
-            //     'column2': div2,
-            //     'column3': div3
-            // };
-    
-            // localStorage.setItem('columnContent', JSON.stringify(columnContentJSON)); 
-            // ***
             div1 = document.querySelectorAll(".div1 .divtask").length
             div2 = document.querySelectorAll(".div2 .divtask").length
             div3 = document.querySelectorAll(".div3 .divtask").length
-
+            
             setColumnCountInStorage(div1, div2, div3)
         }
         else {
@@ -76,38 +51,17 @@ function newtask(el) {
 }
 
 function drop(ev, el) {
-    // console.log("ev: ",ev.dataTransfer.getData("text"))
+
     ev.preventDefault();
     var data = ev.dataTransfer.getData("text");
-    console.log("el: " +el.className.split(' ')[1]) // is there a way to get the current class div??? <-- get 2nd element of classname
-    
-    // console.log("=======================================")
-    // console.log("1"+ document.getElementsByClassName("div1")[0].innerHTML)
-    // console.log("2"+ document.getElementsByClassName("div2")[0].innerHTML)
-    // console.log("3"+ document.getElementsByClassName("div3")[0].innerHTML)
-    
-    // div1 = document.getElementsByClassName("div1")[0].innerHTML;
-    // div2 = document.getElementsByClassName("div2")[0].innerHTML;
-    // div3 = document.getElementsByClassName("div3")[0].innerHTML;
-
-    // columnContentJSON = {
-    //     'column1': div1,
-    //     'column2': div2,
-    //     'column3': div3
-    // };
-
-    // localStorage.setItem('columnContent', JSON.stringify(columnContentJSON));
 
     // check if column has more than 3 tasks
     createdBoardNameJSON = JSON.parse(localStorage.getItem('columnCount'))
     prevDiv1 = createdBoardNameJSON['column1'];
     prevDiv2 = createdBoardNameJSON['column2'];
     prevDiv3 = createdBoardNameJSON['column3'];
-    console.log("prevdiv1: "+prevDiv1)
-    console.log("prevdiv2: "+prevDiv2)
-    console.log("prevdiv3: "+prevDiv2)
 
-    targetColumnClass=el.className.split(' ')[1];
+    targetColumnClass=el.className.split(' ')[1]; // current drop's classname E.g. "div1", "div2", "div3"
     if (targetColumnClass=="div1") {
         if (prevDiv1<3) {
             el.appendChild(document.getElementById(data));
@@ -140,17 +94,17 @@ function setColumnCountInStorage(div1, div2, div3) {
     }
     
     localStorage.setItem('columnCount', JSON.stringify(columnCountJSON)); 
-    console.log("curr added column: "+ JSON.stringify(columnCountJSON));
+    //console.log("curr added column: "+ JSON.stringify(columnCountJSON));
 }
 
 function allowDrop(ev) {
     ev.preventDefault();
 }
 
-function drag(ev) { // ev here not working after refreshing
+function drag(ev) { 
     
     ev.dataTransfer.setData("text", ev.target.id);
-    console.log(ev.target.id);
+    //console.log(ev.target.id);
 }
 
 function deletediv(ev) {
@@ -174,8 +128,7 @@ function deletediv(ev) {
                 'column3': div3
             }
             localStorage.setItem('columnCount', JSON.stringify(columnCountJSON)); 
-		} else {
-	    }
+		} 
 }
 
 // local storage
@@ -193,12 +146,6 @@ if (JSON.parse(localStorage.getItem('createdBoardName')) != null) {
     document.getElementById("title1").innerHTML = title1;
     document.getElementById("title2").innerHTML = title2;
     document.getElementById("title3").innerHTML = title3;
-    
-    // load column content
-    // columnContentJSON = JSON.parse(localStorage.getItem('columnContent'))
-    // document.getElementsByClassName("div1")[0].innerHTML = columnContentJSON["column1"];
-    // document.getElementsByClassName("div2")[0].innerHTML = columnContentJSON["column2"];
-    // document.getElementsByClassName("div3")[0].innerHTML = columnContentJSON["column3"];
 }
 else {
     // hide content & unhide btn
@@ -238,15 +185,5 @@ function createNew() {
     }
     else {
         alert("Please try again!")
-    }
-}
-
-
-function updateTaskDescChanges() {
-    const input = document.getElementById('1');
-    input.addEventListener('input', updateValue);
-
-    function updateValue(e) {
-    console.log(e.target);
     }
 }
