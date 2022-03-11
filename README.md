@@ -1,7 +1,7 @@
 # Assignment
 
 ## Q1
-### Software
+### Software Required
 Require to install MySQL Workbench and Python 3.10.
 
 ### Setup
