@@ -1,10 +1,10 @@
 # Assignment
 
 ## Q1
-
-### Setup
+### Software Required
 Require to install MySQL Workbench and Python 3.10.
 
+### Setup
 After installation, create a schema by opening up MySQL workbench.
 Create new schema and login table by following the steps below:
 * Click File -> Open SQL Script and select “carpark_system.sql”
