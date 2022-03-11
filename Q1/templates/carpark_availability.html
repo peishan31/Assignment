@@ -121,7 +121,7 @@
                     console.log(error.message)
                 })
                 
-                .finally(() => this.loading = false) //change back to false later
+                .finally(() => this.loading = false) 
                 .then(()=>{
                     $(document).ready(function() {
                         $('#carparkTable').DataTable();
