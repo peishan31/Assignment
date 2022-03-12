@@ -77,9 +77,9 @@
                         id="email" placeholder="Enter email" v-model="email" name="email" required>
                 </div>
                 <div class="form-group mt-3">
-                    <label for="contactNo">Contact No</label> <br>
-                    <input type="text" v-bind:class="{'form-control': true, 'is-invalid': validation.contactNo}"
-                        id="contactNo" v-model="contactNo" name="contactNo" required>
+                    <label for="contact_no">Contact No</label> <br>
+                    <input type="text" v-bind:class="{'form-control': true, 'is-invalid': validation.contact_no}"
+                        id="contact_no" v-model="contact_no" name="contact_no" required>
                 </div>
                 <div class="form-group mt-3">
                     <label for="password">Password</label>
@@ -124,7 +124,7 @@
                         email: false,
                         password: false,
                         confirmPassword: false,
-                        contactNo: false
+                        contact_no: false
                     },
                     loading: false
                 }
@@ -136,7 +136,7 @@
                 this.first_name = "";
                 this.last_name = "";
                 this.confirmPassword = "";
-                this.contactNo="";
+                this.contact_no="";
             },
             methods: {
                 add() {
@@ -172,26 +172,23 @@
                     else {
                         this.validation.confirmPassword = false;
                     }
-                    // console.log("contactNo: "+this.contactNo)
-                    // console.log("hi:" + document.getElementById("contactNo").value)
-                    // console.log(document.getElementById("contactNo").value.includes("X"))
-                    if (document.getElementById("contactNo").value.includes("X") == false) {
-                        this.contactNo = document.getElementById("contactNo").value;
+                    
+                    if (document.getElementById("contact_no").value.includes("X") == false) {
+                        this.contact_no = document.getElementById("contact_no").value;
                         var iti_el = $('.iti.iti--allow-dropdown.iti--separate-dial-code');
                         var intlNumber = iti.getNumber();
                         
-                        console.log("intlNumbqweer: ",intlNumber);   
                     }
-                    console.log("final: " + this.contactNo);                    
-                    if (this.contactNo== null || this.contactNo.trim() == "") {
-                        this.validation.contactNo = true;
+            
+                    if (this.contact_no== null || this.contact_no.trim() == "") {
+                        this.validation.contact_no = true;
                     }
                     else {
-                        this.validation.contactNo = false;
+                        this.validation.contact_no = false;
                     }
                     
                     // error message
-                    if (!this.validation.first_name && !this.validation.last_name && !this.validation.email && !this.validation.password && !this.validation.confirmPassword && !this.validation.contactNo) { // check if there's empty field
+                    if (!this.validation.first_name && !this.validation.last_name && !this.validation.email && !this.validation.password && !this.validation.confirmPassword && !this.validation.contact_no) { // check if there's empty field
 
                         // validate email
                         if (!validateEmail(this.email)) {
@@ -238,7 +235,8 @@
                                     "first_name": this.first_name.toLowerCase(),
                                     "last_name": this.last_name.toLowerCase(),
                                     "password": this.password,
-                                    "email": this.email.toLowerCase()
+                                    "email": this.email.toLowerCase(),
+                                    "contact_no": intlNumber
                                 }
                                 // POST request
 
@@ -290,7 +288,7 @@
         }
 
         // phone validation
-        var input = document.querySelectorAll("input[name=contactNo]");
+        var input = document.querySelectorAll("input[name=contact_no]");
         var iti_el = $('.iti.iti--allow-dropdown.iti--separate-dial-code');
         if(iti_el.length){
             iti.destroy();
@@ -316,7 +314,7 @@
                 utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/16.0.0/js/utils.js" 
         });
 
-        $('input[name="contactNo"]').on("focus click countrychange", function(e, countryData) {
+        $('input[name="contact_no"]').on("focus click countrychange", function(e, countryData) {
 
             var pl = $(this).attr('placeholder') + '';
             var res = pl.replace( /X/g ,'9');
@@ -324,11 +322,6 @@
                 $(this).inputmask(res, {placeholder: "X", clearMaskOnLostFocus: true});
             }
         });
-
-        // $('input[name="contactNo"]').on("focusout", function(e, countryData) {
-        //     var intlNumber = iti.getNumber();
-        //     console.log("intlNumber: ",intlNumber);   
-        // });
         }
     </script>
 </body>

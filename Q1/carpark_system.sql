@@ -8,5 +8,6 @@ create table user_table (
     first_name varchar(50),
     last_name varchar(50),
     password text,
-    email text
+    email text,
+    contact_no text
 );

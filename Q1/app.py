@@ -29,15 +29,17 @@ class User(db.Model):
     last_name = db.Column(db.String(50))
     password = db.Column(db.String())
     email = db.Column(db.String())
+    contact_no = db.Column(db.String())
 
-    def __init__(self, first_name, last_name, password, email):
+    def __init__(self, first_name, last_name, password, email, contact_no):
         self.first_name = first_name
         self.last_name = last_name
         self.password = password
         self.email = email
+        self.contact_no = contact_no
 
     def json(self):
-        return {"user_id": self.user_id, "first_name": self.first_name, "last_name": self.last_name, "password": self.password, "email": self.email}
+        return {"user_id": self.user_id, "first_name": self.first_name, "last_name": self.last_name, "password": self.password, "email": self.email, "contact_no": self.contact_no}
 
 def token_required(func):
     @wraps(func)
@@ -57,6 +59,7 @@ def token_required(func):
                 session.pop("logged_in", None)
                 session.pop("token", None)
                 session.pop("email", None)
+                session.pop("contact_no", None)
                 session.pop("first_name", None)
                 session.pop("last_name", None)
             return redirect("/login") # "Token expired. Get new one"
@@ -86,10 +89,11 @@ def home():
     if not session.get('logged_in'):
         return redirect("/login")
     else:
+        contact_no = session.get("contact_no")
         email = session.get('email')
         first_name = session.get('first_name')
         last_name = session.get('last_name')
-        return render_template('view_detail.html', email=email, first_name=first_name, last_name=last_name)
+        return render_template('view_detail.html', contact_no=contact_no, email=email, first_name=first_name, last_name=last_name)
 
 # Register Page
 @app.route('/register')
@@ -109,6 +113,7 @@ def create_user():
         
         first_name = data["first_name"]
         last_name = data["last_name"]
+        contact_no = data["contact_no"]
         email = data["email"]
         password = data["password"]
 
@@ -124,7 +129,8 @@ def create_user():
             "first_name": first_name.title(), 
             "last_name": last_name.title(), 
             "password": hashed_password, 
-            "email": email
+            "email": email,
+            "contact_no": contact_no
         }
         
         user = User(**user_data)
@@ -135,7 +141,7 @@ def create_user():
         # Prep data to return
         user_data_queried = User.query.filter_by(email=email).first()
 
-        user_information = {"user_id":user_data_queried.user_id,"first_name": user_data_queried.first_name, "last_name": user_data_queried.last_name, "email": user_data_queried.email}
+        user_information = {"user_id":user_data_queried.user_id,"first_name": user_data_queried.first_name, "last_name": user_data_queried.last_name, "email": user_data_queried.email, "contact_no": user_data_queried.contact_no}
 
         # Create JWT Token
         token = jwt.encode({
@@ -150,6 +156,7 @@ def create_user():
         session["email"] = user_data_queried.email
         session["first_name"] = user_data_queried.first_name
         session["last_name"] = user_data_queried.last_name
+        session["contact_no"] = user_data_queried.contact_no
 
     except Exception as e:
         return jsonify({"message": e, "type": "error"}), 500
@@ -170,8 +177,6 @@ def login_user():
     '''
     
     data = request.get_json()
-    print("email: ", data["email"])
-    print("password: ", data["password"])
     email = data["email"]
     password = data["password"]
 
@@ -194,13 +199,14 @@ def login_user():
                 'exp': datetime.utcnow() + timedelta(days=2)
             },
             app.config['SECRET_KEY'])
-            print("token: ",token.decode('utf-8'))
+            # print("token: ",token.decode('utf-8'))
             session["token"] =  token.decode('utf-8') # store token
             session["email"] = user_data.email
+            session["contact_no"] = user_data.contact_no
             session["first_name"] = user_data.first_name
             session["last_name"] = user_data.last_name
             
-            user_information = {"user_id": user_data.user_id, "first_name": user_data.first_name, "last_name": user_data.last_name, "email": user_data.email}
+            user_information = {"user_id": user_data.user_id, "first_name": user_data.first_name, "last_name": user_data.last_name, "email": user_data.email, "contact_no": user_data.contact_no}
             return jsonify({"message": "Login successful", "type": "success", "user_information": user_information}), 200
 
 # Get Carpark Availability
@@ -216,6 +222,7 @@ def logout():
         session.pop("logged_in", None)
         session.pop("token", None)
         session.pop("email", None)
+        session.pop("contact_no", None)
         session.pop("first_name", None)
         session.pop("last_name", None)
 
