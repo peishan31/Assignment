@@ -106,7 +106,7 @@ def register():
 @app.route("/user/create", methods=["POST"])
 def create_user():
     '''
-    This endpoint will return create user into the db
+    This will return create user into the db
     '''
     try:
         data = request.get_json()
@@ -173,7 +173,7 @@ def login():
 @app.route('/user/login', methods=['POST'])
 def login_user():
     '''
-    This endpoint will authenticate the user
+    This will authenticate the user
     '''
     
     data = request.get_json()
